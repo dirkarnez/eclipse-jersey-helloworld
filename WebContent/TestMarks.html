@@ -1,0 +1,87 @@
+<html>
+<body>
+	<script type="text/javascript">
+		function createRequest() {
+			var xmlhttp;
+			if (window.XMLHttpRequest) {
+				xmlhttp = new XMLHttpRequest();
+			} else {
+				xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+			}
+			return xmlhttp;
+		}
+
+		function addRecord() {
+			var req = createRequest();
+			var id = document.getElementById("ID");
+			var mark = document.getElementById("Mark");
+			var status = document.getElementById("Status");
+
+			req.onreadystatechange = function() { // Call back function
+				if (req.readyState == 4) {
+					if (req.status == 200) {
+						status.value = `Record of ${id.value} added`;
+					} else {
+						status.value = `Record of ${id.value} cannot be added`;
+					}
+				}
+			};
+
+			req.open("POST", `/JerseyRestDemoApp/database/mark/record?id=${id.value}&mark=${mark.value}`, true);
+			req.send();
+		}
+
+		function getRecord() {
+			var req = createRequest();
+			var id = document.getElementById("ID");
+			var mark = document.getElementById("Mark");
+			var status = document.getElementById("Status");
+
+			req.onreadystatechange = function() { // Call back function
+				if (req.readyState == 4) {
+					if (req.status == 200) {
+						status.value = `Record of ${id.value} retrieved`;
+						mark.value = req.responseText;
+					} else {
+						status.value = `Record of ${id.value} cannot be retrieved`;
+						mark.value = "";
+					}
+				}
+			};
+
+			req.open("GET", `/JerseyRestDemoApp/database/mark/record?id=${id.value}`, true);
+			req.send();
+		}
+
+		function updateRecord() {
+			var req = createRequest();
+			var id = document.getElementById("ID");
+			var mark = document.getElementById("Mark");
+			var status = document.getElementById("Status");
+
+			req.onreadystatechange = function() { // Call back function
+				if (req.readyState == 4) {
+					if (req.status == 200) {
+						status.value = `Record of ${id.value} updated`;
+					} else {
+						status.value = `Record of ${id.value} cannot be updated`;
+					}
+				}
+			};
+
+			req.open("PUT", `/JerseyRestDemoApp/database/mark/record?id=${id.value}&mark=${mark.value}`, true);
+			req.send();
+		}
+	</script>
+</body>
+
+<body>
+	<input type="text" id="ID" size="10" value="">
+	<input type="text" id="Mark" size="5" value="">
+	<input type="text" id="Status" size="30" value="">
+	<br />
+	<button type="button" onclick="addRecord()">Add Record</button>
+	<button type="button" onclick="getRecord()">Get Record</button>
+	<button type="button" onclick="updateRecord()">Update Record</button>
+</body>
+</html>
